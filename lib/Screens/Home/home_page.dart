@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:scalp_pure/Screens/Home/product_details.dart';
+import 'package:scalp_pure/Widget/AppPicker.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppColor.dart';
 import 'package:camera_camera/camera_camera.dart';
@@ -21,6 +23,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  File? image;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,11 +56,12 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(
             builder: (_) => CameraCamera(
-                  onFile: (image) {
+                  onFile: (image) async {
                     file = image;
                     print(file.path);
                     //inputImage = InputImage.fromFile(file);
                     Navigator.pop(context);
+                    image = (await AppPicker.editImage(image: file))!;
                     //  process();
                     setState(() {});
                   },
@@ -100,7 +105,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.white,
           ),
           onPressed: () {
-            pickImage();
+            AppPicker.getImage(context: context, imageFile: image);
           },
         ),
       ],
@@ -159,17 +164,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  Future<void> pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      print(image.path);
-      //  _handleLostFiles(files);
-    } else {
-      //  _handleError(response.exception);
-    }
   }
 }

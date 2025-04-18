@@ -49,6 +49,8 @@ dependencies:
   fluentui_system_icons: ^1.1.257
   flutter_expandable_fab: ^2.4.1
   image_picker: ^1.1.2
+  device_info_plus: ^9.1.0
+  image_cropper: ^5.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
