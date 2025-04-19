@@ -43,7 +43,7 @@ class AppPicker extends StatelessWidget {
                           .onError((error, stackTrace) {
                         AppSnackBar.showInSnackBar(
                             context: context,
-                            message: 'حدث خطأ حاول لاحقا',
+                            message: 'something went wrong please try again later',
                             isSuccessful: false);
                       }),
                       if (pickedFile != null)
@@ -65,7 +65,7 @@ class AppPicker extends StatelessWidget {
                               AppSnackBar.showInSnackBar(
                                   context: context,
                                   message:
-                                      ' الرجاء رفع الصورة بصيغة png او jpg',
+                                      ' image allowed extensions are png or jpg',
                                   isSuccessful: false)
                             }
                         }
@@ -73,9 +73,9 @@ class AppPicker extends StatelessWidget {
                   : {
                       AppDialog.infoDialogue(
                         context: context,
-                        title: 'اذونات',
+                        title: 'Permission',
                         message:
-                            "الرجاء تفعيل اذن الوصول للوسائط لاكمال العملية",
+                            "please enable storage permission to continue",
                       )
                     };
             })
@@ -92,7 +92,7 @@ class AppPicker extends StatelessWidget {
                             .onError((error, stackTrace) {
                           AppSnackBar.showInSnackBar(
                               context: context,
-                              message: 'حدث خطأ حاول لاحقا',
+                              message: 'something went wrong please try again later',
                               isSuccessful: false);
                         });
                         if (pickedFile != null) {
@@ -109,16 +109,16 @@ class AppPicker extends StatelessWidget {
                           } else {
                             AppSnackBar.showInSnackBar(
                                 context: context,
-                                message: ' الرجاء رفع الصورة بصيغة png او jpg',
+                                message: ' image allowed extensions are png or jpg',
                                 isSuccessful: false);
                           }
                         }
                       } else {
                         AppDialog.infoDialogue(
                           context: context,
-                          title: 'اذونات',
+                          title: 'Permission',
                           message:
-                              "الرجاء تفعيل اذن الوصول للوسائط لاكمال العملية",
+                              "please enable storage permission to continue",
                         );
                       }
                     })
@@ -134,7 +134,7 @@ class AppPicker extends StatelessWidget {
                                   .onError((error, stackTrace) {
                                 AppSnackBar.showInSnackBar(
                                     context: context,
-                                    message: 'حدث خطأ حاول لاحقا',
+                                    message: 'something went wrong please try again later',
                                     isSuccessful: false);
                               }),
                               if (pickedFile != null)
@@ -157,7 +157,7 @@ class AppPicker extends StatelessWidget {
                                       AppSnackBar.showInSnackBar(
                                           context: context,
                                           message:
-                                              ' الرجاء رفع الصورة بصيغة png او jpg',
+                                              'image allowed extensions are png or jpg',
                                           isSuccessful: false)
                                     }
                                 }
@@ -165,9 +165,9 @@ class AppPicker extends StatelessWidget {
                           : {
                               AppDialog.infoDialogue(
                                 context: context,
-                                title: 'اذونات',
+                                title: 'Permission',
                                 message:
-                                    "الرجاء تفعيل اذن الوصول للوسائط لاكمال العملية",
+                                    "please enable storage permission to continue",
                               )
                             };
                     })
@@ -184,14 +184,14 @@ class AppPicker extends StatelessWidget {
       compressQuality: 100,
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'تعديل الصورة',
+            toolbarTitle: 'Edit Photo',
             toolbarColor: AppColor.green,
             toolbarWidgetColor: AppColor.white,
             activeControlsWidgetColor: AppColor.lightGreen,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         IOSUiSettings(
-          title: 'تعديل الصورة',
+          title: 'Edit Photo',
         ),
       ],
     );

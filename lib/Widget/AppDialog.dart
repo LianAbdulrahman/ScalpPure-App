@@ -34,7 +34,7 @@ class AppDialog {
       {required context, String? message, String? title, String? lottie, Widget? child}) {
     return showDialog(
         barrierDismissible: false,
-        barrierColor: AppColor.noColor,
+        barrierColor: AppColor.black.withOpacity(.3),
         context: context,
         builder: (cont) {
           return Padding(
@@ -66,6 +66,7 @@ class AppDialog {
                                   ),
                                   IconButton(
                                     onPressed: () {
+                                      Navigator.pop(cont);
                                     },
                                     icon: Icon(
                                       AppIcons.backArrow,
@@ -89,7 +90,7 @@ class AppDialog {
                         Padding(
                           padding: EdgeInsets.only(
                             left: 15.w,
-                            top: 30.h,
+                            top: 15.h,
                             right: 15.w,
                           ),
                           child: AppText(
@@ -101,6 +102,7 @@ class AppDialog {
                             textDecoration: TextDecoration.none,
                           ),
                         ),
+                        SizedBox(height: 30.h,),
                         Visibility(
                             visible: lottie != null,
                             child: Transform.translate(
@@ -111,7 +113,7 @@ class AppDialog {
                                 ))),
                         Visibility(
                             visible: child != null,
-                            child: child??SizedBox())
+                            child: child?? const SizedBox())
                       ],
                     ))
               ],

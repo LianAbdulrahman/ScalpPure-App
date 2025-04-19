@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:scalp_pure/BackEnd/class_models.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppColor.dart';
 import 'package:scalp_pure/components/AppIcons.dart';
+import 'package:scalp_pure/components/AppMessage.dart';
 import 'package:scalp_pure/components/AppSize.dart';
-
 import '../../components/GeneralWidget.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+  final Product product;
+  final bool isFile;
+  const ProductDetail({super.key, required this.product, required this.isFile});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -32,7 +35,8 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ),
         title: AppText(
-          text: 'Scalp Building up Chemicals',
+          text:
+              '${widget.product.buildingUpChemicals.length} ${AppMessage.productDetailsTitle}',
           fontSize: AppSize.appBarTextSize,
           color: AppColor.white,
         ),
@@ -48,20 +52,28 @@ class _ProductDetailState extends State<ProductDetail> {
               decoration: GeneralWidget.decoration(),
               child: SizedBox(
                 width: double.infinity,
+                height: 200.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
-                  child: Image.asset(
-                    'assets/images/productTest.jpeg',
-                    fit: BoxFit.cover,
-                  ),
+                  child: widget.isFile
+                      ? Image.file(
+                          widget.product.image!,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          widget.product.image!.path,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
-            ListView.builder(
-                padding: EdgeInsets.only(top: 8.h),
-                itemCount: 3,
-                shrinkWrap: true,
-                itemBuilder: (_, i) => itemContainer(index: i)),
+            Flexible(
+              child: ListView.builder(
+                  padding: EdgeInsets.only(top: 8.h),
+                  itemCount: widget.product.buildingUpChemicals.length,
+                  shrinkWrap: true,
+                  itemBuilder: (_, i) => itemContainer(index: i)),
+            ),
           ],
         ),
       ),
@@ -76,18 +88,24 @@ class _ProductDetailState extends State<ProductDetail> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AppText(
-                text: 'Building-up Ingredient $index',
-                fontSize: AppSize.textSize,
-                color: AppColor.darkGray,
+              Flexible(
+                flex: 3,
+                child: AppText(
+                  text: widget.product.buildingUpChemicals[index],
+                  fontSize: AppSize.smallSubText,
+                  color: AppColor.darkGray,
+                  overflow: TextOverflow.visible,
+                ),
               ),
-              CircleAvatar(
-                radius: 15.r,
-                backgroundColor: AppColor.green,
-                child: Icon(
-                  AppIcons.info,
-                  color: AppColor.white,
-                  size: AppSize.iconsSize,
+              Flexible(
+                child: CircleAvatar(
+                  radius: 15.r,
+                  backgroundColor: AppColor.green,
+                  child: Icon(
+                    AppIcons.info,
+                    color: AppColor.white,
+                    size: AppSize.iconsSize,
+                  ),
                 ),
               )
             ],

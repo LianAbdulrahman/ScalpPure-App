@@ -2,9 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:scalp_pure/BackEnd/class_models.dart';
+import 'package:scalp_pure/BackEnd/provider_class.dart';
 import 'package:scalp_pure/Screens/Home/product_details.dart';
+import 'package:scalp_pure/Widget/AppDialog.dart';
 import 'package:scalp_pure/Widget/AppPicker.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppColor.dart';
@@ -52,20 +55,31 @@ class _HomePageState extends State<HomePage> {
 
   openCamera() async {
     File file = File('');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => CameraCamera(
-                  onFile: (image) async {
-                    file = image;
-                    print(file.path);
-                    //inputImage = InputImage.fromFile(file);
-                    Navigator.pop(context);
-                    image = (await AppPicker.editImage(image: file))!;
-                    //  process();
-                    setState(() {});
-                  },
-                )));
+    await Permission.camera.request().then((result) {
+      result.isGranted
+          ? {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => CameraCamera(
+                            onFile: (image) async {
+                              file = image;
+                              Navigator.pop(context);
+                              image = (await AppPicker.editImage(image: file))!;
+                              context
+                                  .read<ProviderClass>()
+                                  .testProduct(context: context, image: image);
+                            },
+                          )))
+            }
+          : result.isDenied
+              ? openCamera()
+              : AppDialog.infoDialogue(
+                  context: context,
+                  title: 'Permission',
+                  message: "please enable camera permission to continue",
+                );
+    });
   }
 
   expandedFab() {
@@ -104,8 +118,14 @@ class _HomePageState extends State<HomePage> {
             AppIcons.gallery,
             color: AppColor.white,
           ),
-          onPressed: () {
-            AppPicker.getImage(context: context, imageFile: image);
+          onPressed: () async {
+            image =
+                await AppPicker.getImage(context: context, imageFile: image);
+            if (image != null) {
+              context
+                  .read<ProviderClass>()
+                  .testProduct(context: context, image: image!);
+            }
           },
         ),
       ],
@@ -115,17 +135,28 @@ class _HomePageState extends State<HomePage> {
   productContainer() {
     return InkWell(
       onTap: () {
-        AppRoutes.pushTo(context, const ProductDetail());
+        AppRoutes.pushTo(
+            context,
+            ProductDetail(
+              isFile: false,
+              product: Product(
+                  image: File('assets/images/productTest.jpeg'),
+                  buildingUpChemicals: [
+                    'Building-up Ingredient 1',
+                    'Building-up Ingredient 2',
+                    'Building-up Ingredient 3'
+                  ]),
+            ));
       },
       child: Container(
-        height: 170.h,
+        height: 165.h,
         width: double.infinity,
-        margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+        margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w),
         decoration: GeneralWidget.decoration(),
         child: Column(
           children: [
             Flexible(
-                flex: 2,
+                flex: 3,
                 child: SizedBox(
                   width: double.infinity,
                   child: ClipRRect(
@@ -140,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             Flexible(
                 child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              padding: EdgeInsets.only(top: 8.h, left: 10.w, right: 10.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

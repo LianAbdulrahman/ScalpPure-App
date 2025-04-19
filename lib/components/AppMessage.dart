@@ -25,4 +25,5 @@ class AppMessage {
         'Authorization': 'Bearer $token'
       };
   static String appName = 'Scalp Pure';
+  static String productDetailsTitle = 'Scalp Building up Chemicals';
 }
