@@ -68,11 +68,40 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
             ),
             Flexible(
-              child: ListView.builder(
-                  padding: EdgeInsets.only(top: 8.h),
-                  itemCount: widget.product.buildingUpChemicals.length,
-                  shrinkWrap: true,
-                  itemBuilder: (_, i) => itemContainer(index: i)),
+              child: widget.product.buildingUpChemicals.isEmpty
+                  ? Padding(
+                      padding: EdgeInsets.all(15.r),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 3,
+                            child: AppText(
+                              text: AppMessage.noChemicals,
+                              fontSize: AppSize.smallSubText,
+                              color: AppColor.darkGray,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                          Flexible(
+                            child: CircleAvatar(
+                              radius: 18.r,
+                              backgroundColor: AppColor.green,
+                              child: Icon(
+                                AppIcons.done,
+                                color: AppColor.white,
+                                size: AppSize.iconsSize + 5,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.only(top: 8.h),
+                      itemCount: widget.product.buildingUpChemicals.length,
+                      shrinkWrap: true,
+                      itemBuilder: (_, i) => itemContainer(index: i)),
             ),
           ],
         ),

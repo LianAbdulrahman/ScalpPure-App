@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
             padding: EdgeInsets.only(top: 8.h),
             itemCount: 2,
-            itemBuilder: (_, i) => productContainer()),
+            itemBuilder: (_, i) => productContainer(index: i)),
       ),
     );
   }
@@ -76,8 +76,8 @@ class _HomePageState extends State<HomePage> {
               ? openCamera()
               : AppDialog.infoDialogue(
                   context: context,
-                  title: 'Permission',
-                  message: "please enable camera permission to continue",
+                  title: AppMessage.permission,
+                  message: AppMessage.cameraPermission,
                 );
     });
   }
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  productContainer() {
+  productContainer({required int index}) {
     return InkWell(
       onTap: () {
         AppRoutes.pushTo(
@@ -182,9 +182,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   CircleAvatar(
                     radius: 15.r,
-                    backgroundColor: AppColor.error,
+                    backgroundColor:
+                        index == 0 ? AppColor.error : AppColor.green,
                     child: Icon(
-                      AppIcons.close,
+                      index == 0 ? AppIcons.close : AppIcons.done,
                       color: AppColor.white,
                     ),
                   )

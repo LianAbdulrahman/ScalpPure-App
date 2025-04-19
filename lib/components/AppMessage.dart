@@ -26,4 +26,24 @@ class AppMessage {
       };
   static String appName = 'Scalp Pure';
   static String productDetailsTitle = 'Scalp Building up Chemicals';
+  static String mainTitle = 'Make right choices for your hair health!';
+
+  static String signUpPhone = 'Sign up with phone';
+  static String signUpGoogle = 'Sign up with Google';
+  static String youHaveAccount = 'You already have account?';
+  static String login = ' LogIn';
+  static String logInPhone = 'LogIn with phone';
+  static String logInGoogle = 'Continue with Google';
+  static String youDoNotHaveAccount = 'You do not have account?';
+  static String signUp = 'SignUp';
+  static String noChemicals = 'No Building up Chemicals ';
+  static String permission = 'Permission';
+  static String cameraPermission =
+      "please enable camera permission to continue";
+  static String storagePermission =
+      "please enable storage permission to continue";
+  static String photoPermission = "please enable photo permission to continue";
+  static String tryAgain = 'something went wrong please try again later';
+  static String allowedExtensions = ' image allowed extensions are png or jpg';
+  static String editPhoto = 'Edit Photo';
 }

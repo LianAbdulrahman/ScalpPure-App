@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../components/AppColor.dart';
+import '../components/AppMessage.dart';
 import 'AppDialog.dart';
 import 'AppSnackBar.dart';
 
@@ -43,7 +44,7 @@ class AppPicker extends StatelessWidget {
                           .onError((error, stackTrace) {
                         AppSnackBar.showInSnackBar(
                             context: context,
-                            message: 'something went wrong please try again later',
+                            message: AppMessage.tryAgain,
                             isSuccessful: false);
                       }),
                       if (pickedFile != null)
@@ -64,8 +65,7 @@ class AppPicker extends StatelessWidget {
                             {
                               AppSnackBar.showInSnackBar(
                                   context: context,
-                                  message:
-                                      ' image allowed extensions are png or jpg',
+                                  message: AppMessage.allowedExtensions,
                                   isSuccessful: false)
                             }
                         }
@@ -73,9 +73,8 @@ class AppPicker extends StatelessWidget {
                   : {
                       AppDialog.infoDialogue(
                         context: context,
-                        title: 'Permission',
-                        message:
-                            "please enable storage permission to continue",
+                        title: AppMessage.permission,
+                        message: AppMessage.photoPermission,
                       )
                     };
             })
@@ -92,7 +91,7 @@ class AppPicker extends StatelessWidget {
                             .onError((error, stackTrace) {
                           AppSnackBar.showInSnackBar(
                               context: context,
-                              message: 'something went wrong please try again later',
+                              message: AppMessage.tryAgain,
                               isSuccessful: false);
                         });
                         if (pickedFile != null) {
@@ -109,16 +108,15 @@ class AppPicker extends StatelessWidget {
                           } else {
                             AppSnackBar.showInSnackBar(
                                 context: context,
-                                message: ' image allowed extensions are png or jpg',
+                                message: AppMessage.allowedExtensions,
                                 isSuccessful: false);
                           }
                         }
                       } else {
                         AppDialog.infoDialogue(
                           context: context,
-                          title: 'Permission',
-                          message:
-                              "please enable storage permission to continue",
+                          title: AppMessage.permission,
+                          message: AppMessage.storagePermission,
                         );
                       }
                     })
@@ -134,7 +132,7 @@ class AppPicker extends StatelessWidget {
                                   .onError((error, stackTrace) {
                                 AppSnackBar.showInSnackBar(
                                     context: context,
-                                    message: 'something went wrong please try again later',
+                                    message: AppMessage.tryAgain,
                                     isSuccessful: false);
                               }),
                               if (pickedFile != null)
@@ -156,8 +154,7 @@ class AppPicker extends StatelessWidget {
                                     {
                                       AppSnackBar.showInSnackBar(
                                           context: context,
-                                          message:
-                                              'image allowed extensions are png or jpg',
+                                          message: AppMessage.allowedExtensions,
                                           isSuccessful: false)
                                     }
                                 }
@@ -165,9 +162,8 @@ class AppPicker extends StatelessWidget {
                           : {
                               AppDialog.infoDialogue(
                                 context: context,
-                                title: 'Permission',
-                                message:
-                                    "please enable storage permission to continue",
+                                title: AppMessage.permission,
+                                message: AppMessage.storagePermission,
                               )
                             };
                     })
@@ -184,14 +180,14 @@ class AppPicker extends StatelessWidget {
       compressQuality: 100,
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Edit Photo',
+            toolbarTitle: AppMessage.editPhoto,
             toolbarColor: AppColor.green,
             toolbarWidgetColor: AppColor.white,
             activeControlsWidgetColor: AppColor.lightGreen,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         IOSUiSettings(
-          title: 'Edit Photo',
+          title: AppMessage.editPhoto,
         ),
       ],
     );

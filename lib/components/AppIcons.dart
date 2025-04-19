@@ -13,5 +13,6 @@ class AppIcons {
   static IconData fail = FluentIcons.dismiss_20_regular;
   static IconData close = Icons.close;
   static IconData info = FluentIcons.info_12_filled;
+  static IconData done = FluentIcons.checkmark_12_filled;
 
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:scalp_pure/Screens/Auth/login.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
 import '../../components/AppColor.dart';
+import '../../components/AppMessage.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -20,22 +22,24 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
-            Image.asset(
-              'assets/images/logo.png',
-              color: AppColor.grayGreen,
+            Padding(
+              padding: EdgeInsets.only(top: 70.h),
+              child: Image.asset(
+                'assets/images/logo.png',
+                color: AppColor.grayGreen,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.all(12.r),
+              padding: EdgeInsets.only(right: 12.w, left: 12.w, bottom: 30.h),
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: 20.h, bottom: 60.h, left: 5.w, right: 5.w),
+                    padding:
+                        EdgeInsets.only(bottom: 60.h, left: 5.w, right: 5.w),
                     child: AppText(
-                      text: 'Make right choices for your hair health!',
+                      text: AppMessage.mainTitle,
                       fontSize: AppSize.titleSize,
                       color: AppColor.darkGray.withOpacity(.8),
                       align: TextAlign.center,
@@ -56,7 +60,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                       textStyleColor: AppColor.grayGreen,
-                      text: 'Sign up with phone'),
+                      text: AppMessage.signUpPhone),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -74,7 +78,27 @@ class _SignUpState extends State<SignUp> {
                         AppRoutes.pushReplacementTo(context, const HomePage());
                       },
                       textStyleColor: AppColor.white,
-                      text: 'Sign up with Google'),
+                      text: AppMessage.signUpGoogle),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppText(
+                      text: AppMessage.youHaveAccount,
+                      fontSize: AppSize.smallSubText - 2),
+                  InkWell(
+                      onTap: () {
+                        AppRoutes.pushReplacementTo(context, const LogIn());
+                      },
+                      child: AppText(
+                        text: AppMessage.login,
+                        fontSize: AppSize.smallSubText - 2,
+                        color: AppColor.grayGreen,
+                      )),
                 ],
               ),
             )
