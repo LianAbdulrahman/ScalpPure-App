@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scalp_pure/Screens/Auth/login.dart';
-import 'package:scalp_pure/Screens/Auth/signUp-with-phone.dart';
+import 'package:scalp_pure/Screens/Auth/signUp_with_phone.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppText.dart';

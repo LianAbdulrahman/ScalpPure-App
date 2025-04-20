@@ -49,7 +49,5 @@ class AppMessage {
   static String mandatoryTx = 'required field';
   static String startWith0 = 'phone number should start with number 0';
   static String noLessThan10 = "phone number should be 10 digits";
-  static String invalidPassword =
-      'password should be at least 8 characters';
-  static String noMatch = 'password and confirm password do not match';
+  static String verify = "Verify";
 }

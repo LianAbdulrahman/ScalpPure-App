@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scalp_pure/Screens/Auth/sign_up.dart';
+import 'package:scalp_pure/Screens/Auth/verify_phone.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
@@ -22,7 +23,6 @@ class _LogInState extends State<LogIn> {
   final _key = GlobalKey<FormState>();
 
   TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _LogInState extends State<LogIn> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: 20.h, right: 12.w, left: 12.w, bottom: 30.h),
+                      top: 30.h, right: 12.w, left: 12.w, bottom: 30.h),
                   child: Column(
                     children: [
                       AppTextFields(
@@ -67,21 +67,7 @@ class _LogInState extends State<LogIn> {
                           hintColor: AppColor.lightGrey,
                           hintText: 'phone number'),
                       SizedBox(
-                        height: 10.h,
-                      ),
-                      AppTextFields(
-                          validator: (pass) {
-                            if (pass!.trim().isEmpty) {
-                              return AppMessage.mandatoryTx;
-                            }
-                            return null;
-                          },
-                          controller: password,
-                          obscureText: true,
-                          hintColor: AppColor.lightGrey,
-                          hintText: 'password'),
-                      SizedBox(
-                        height: 20.h,
+                        height: 15.h,
                       ),
                       AppButtons(
                           height: 45.h,
@@ -90,7 +76,7 @@ class _LogInState extends State<LogIn> {
                           onPressed: () {
                             if (_key.currentState!.validate()) {
                               AppRoutes.pushReplacementTo(
-                                  context, const HomePage());
+                                  context, const VerifyPhone());
                             }
                           },
                           textStyleColor: AppColor.grayGreen,

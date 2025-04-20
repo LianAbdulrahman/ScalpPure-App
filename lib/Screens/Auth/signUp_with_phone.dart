@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:scalp_pure/Screens/Auth/login.dart';
 import 'package:scalp_pure/Screens/Auth/sign_up.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
@@ -23,8 +24,6 @@ class _SignUpPhoneState extends State<SignUpPhone> {
   final _key = GlobalKey<FormState>();
 
   TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(right: 12.w, left: 12.w, bottom: 30.h),
+                      EdgeInsets.only(top: 30.h,right: 12.w, left: 12.w, bottom: 30.h),
                   child: Column(
                     children: [
                       AppTextFields(
@@ -68,44 +67,9 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           ],
                           hintColor: AppColor.lightGrey,
                           hintText: 'phone number'),
+
                       SizedBox(
-                        height: 10.h,
-                      ),
-                      AppTextFields(
-                          validator: (pass) {
-                            if (pass!.isEmpty) {
-                              return AppMessage.mandatoryTx;
-                            } else if (pass.length < 8) {
-                              return AppMessage.invalidPassword;
-                            } else {
-                              return null;
-                            }
-                          },
-                          controller: password,
-                          obscureText: true,
-                          hintColor: AppColor.lightGrey,
-                          hintText: 'password'),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      AppTextFields(
-                          validator: (confirmPassword) {
-                            if (confirmPassword!.isEmpty) {
-                              return AppMessage.mandatoryTx;
-                            } else if (confirmPassword.length < 8) {
-                              return AppMessage.invalidPassword;
-                            } else if (confirmPassword != password.text) {
-                              return AppMessage.noMatch;
-                            } else {
-                              return null;
-                            }
-                          },
-                          controller: confirmPassword,
-                          obscureText: true,
-                          hintColor: AppColor.lightGrey,
-                          hintText: 'confirm password'),
-                      SizedBox(
-                        height: 20.h,
+                        height: 15.h,
                       ),
                       AppButtons(
                           height: 45.h,
@@ -167,7 +131,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                       InkWell(
                           onTap: () {
                             AppRoutes.pushReplacementTo(
-                                context, const SignUp());
+                                context, const LogIn());
                           },
                           child: AppText(
                             text: AppMessage.login,

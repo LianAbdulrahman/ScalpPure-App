@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "477093710050",
+    "project_id": "scalppure-2bff4",
+    "storage_bucket": "scalppure-2bff4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477093710050:android:db57d514d443aa736e76bb",
+        "android_client_info": {
+          "package_name": "com.example.scalp_pure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477093710050-sp707jtacfqvg0s69mlp07f899stc7oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC0-OX_nP8pekjonf_4N_50JYB4jt7NP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "477093710050-sp707jtacfqvg0s69mlp07f899stc7oq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
