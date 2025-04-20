@@ -6,23 +6,25 @@ import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/Widget/AppTextFields.dart';
+import 'package:scalp_pure/components/AppIcons.dart';
 import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
 import '../../components/AppColor.dart';
 import '../../components/AppMessage.dart';
 
-class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+class SignUpPhone extends StatefulWidget {
+  const SignUpPhone({super.key});
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<SignUpPhone> createState() => _SignUpPhoneState();
 }
 
-class _LogInState extends State<LogIn> {
+class _SignUpPhoneState extends State<SignUpPhone> {
   final _key = GlobalKey<FormState>();
 
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +45,8 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: 20.h, right: 12.w, left: 12.w, bottom: 30.h),
+                  padding:
+                      EdgeInsets.only(right: 12.w, left: 12.w, bottom: 30.h),
                   child: Column(
                     children: [
                       AppTextFields(
@@ -71,15 +73,37 @@ class _LogInState extends State<LogIn> {
                       ),
                       AppTextFields(
                           validator: (pass) {
-                            if (pass!.trim().isEmpty) {
+                            if (pass!.isEmpty) {
                               return AppMessage.mandatoryTx;
+                            } else if (pass.length < 8) {
+                              return AppMessage.invalidPassword;
+                            } else {
+                              return null;
                             }
-                            return null;
                           },
                           controller: password,
                           obscureText: true,
                           hintColor: AppColor.lightGrey,
                           hintText: 'password'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      AppTextFields(
+                          validator: (confirmPassword) {
+                            if (confirmPassword!.isEmpty) {
+                              return AppMessage.mandatoryTx;
+                            } else if (confirmPassword.length < 8) {
+                              return AppMessage.invalidPassword;
+                            } else if (confirmPassword != password.text) {
+                              return AppMessage.noMatch;
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: confirmPassword,
+                          obscureText: true,
+                          hintColor: AppColor.lightGrey,
+                          hintText: 'confirm password'),
                       SizedBox(
                         height: 20.h,
                       ),
@@ -88,13 +112,13 @@ class _LogInState extends State<LogIn> {
                           width: double.infinity,
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
                           onPressed: () {
-                            if (_key.currentState!.validate()) {
+                            if(_key.currentState!.validate()){
                               AppRoutes.pushReplacementTo(
                                   context, const HomePage());
                             }
                           },
                           textStyleColor: AppColor.grayGreen,
-                          text: AppMessage.login),
+                          text: AppMessage.signUp),
                       SizedBox(
                         height: 40.h,
                       ),
@@ -115,7 +139,7 @@ class _LogInState extends State<LogIn> {
                               width: 25.w,
                             ),
                             AppText(
-                                text: '  ${AppMessage.logInGoogle}  ',
+                                text: '  ${AppMessage.signUpGoogle}  ',
                                 color: AppColor.darkGray,
                                 fontSize: AppSize.smallSubText - 2),
                             Flexible(
@@ -138,14 +162,15 @@ class _LogInState extends State<LogIn> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AppText(
-                          text: AppMessage.youDoNotHaveAccount,
+                          text: AppMessage.youHaveAccount,
                           fontSize: AppSize.smallSubText - 2),
                       InkWell(
                           onTap: () {
-                            AppRoutes.pushReplacementTo(context, const SignUp());
+                            AppRoutes.pushReplacementTo(
+                                context, const SignUp());
                           },
                           child: AppText(
-                            text: AppMessage.signUp,
+                            text: AppMessage.login,
                             fontSize: AppSize.smallSubText - 2,
                             color: AppColor.grayGreen,
                           )),

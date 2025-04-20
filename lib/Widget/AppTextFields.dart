@@ -123,7 +123,7 @@ class AppTextFields extends StatelessWidget {
           filled: true,
           errorStyle: TextStyle(
               color: AppColor.error,
-              fontSize: AppSize.errorSize,
+              fontSize: AppSize.errorSize-2,
               fontFamily: GoogleFonts.libreBaskerville().fontFamily),
           hintStyle: AppText.styleText(
             color: hintColor ?? AppColor.darkGray,

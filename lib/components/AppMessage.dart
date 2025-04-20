@@ -35,7 +35,7 @@ class AppMessage {
   static String logInPhone = 'LogIn with phone';
   static String logInGoogle = 'Continue with Google';
   static String youDoNotHaveAccount = 'You do not have account?';
-  static String signUp = 'SignUp';
+  static String signUp = ' SignUp';
   static String noChemicals = 'No Building up Chemicals ';
   static String permission = 'Permission';
   static String cameraPermission =
@@ -46,4 +46,10 @@ class AppMessage {
   static String tryAgain = 'something went wrong please try again later';
   static String allowedExtensions = ' image allowed extensions are png or jpg';
   static String editPhoto = 'Edit Photo';
+  static String mandatoryTx = 'required field';
+  static String startWith0 = 'phone number should start with number 0';
+  static String noLessThan10 = "phone number should be 10 digits";
+  static String invalidPassword =
+      'password should be at least 8 characters';
+  static String noMatch = 'password and confirm password do not match';
 }
