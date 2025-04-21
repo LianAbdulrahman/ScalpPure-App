@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:scalp_pure/BackEnd/provider_class.dart';
 import 'package:scalp_pure/Screens/Auth/sign_up.dart';
 import 'package:scalp_pure/Screens/Auth/verify_phone.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
@@ -9,6 +13,8 @@ import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/Widget/AppTextFields.dart';
 import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
+import '../../Widget/AppDialog.dart';
+import '../../Widget/AppSnackBar.dart';
 import '../../components/AppColor.dart';
 import '../../components/AppMessage.dart';
 
@@ -55,7 +61,7 @@ class _LogInState extends State<LogIn> {
                             if (!phone.startsWith('0')) {
                               return AppMessage.startWith0;
                             }
-                            if (phone.length != 10) {
+                            if (phone.length != 9) {
                               return AppMessage.noLessThan10;
                             }
                             return null;
@@ -73,10 +79,24 @@ class _LogInState extends State<LogIn> {
                           height: 45.h,
                           width: double.infinity,
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_key.currentState!.validate()) {
-                              AppRoutes.pushReplacementTo(
-                                  context, const VerifyPhone());
+                              await FirebaseAuth.instance.verifyPhoneNumber(
+                                  phoneNumber: '+966 543 646 975',
+                                  verificationCompleted: (PhoneAuthCredential
+                                      phoneAuthCredential) {},
+                                  verificationFailed:
+                                      (FirebaseAuthException error) {},
+                                  codeSent: (String verificationId,
+                                      int? forceResendingToken) {
+                                    AppRoutes.pushReplacementTo(
+                                        context,
+                                        VerifyPhone(
+                                          verificationId: verificationId,
+                                        ));
+                                  },
+                                  codeAutoRetrievalTimeout:
+                                      (String verificationId) {});
                             }
                           },
                           textStyleColor: AppColor.grayGreen,
@@ -100,10 +120,32 @@ class _LogInState extends State<LogIn> {
                               height: 25.h,
                               width: 25.w,
                             ),
-                            AppText(
-                                text: '  ${AppMessage.logInGoogle}  ',
-                                color: AppColor.darkGray,
-                                fontSize: AppSize.smallSubText - 2),
+                            InkWell(
+                              onTap: () async {
+                                AppDialog.showLoading(context: context);
+                                context
+                                    .read<ProviderClass>()
+                                    .signInWithGoogle()
+                                    .then((credential) {
+                                  Navigator.pop(con!);
+                                  credential != null
+                                      ? {
+                                          AppRoutes.pushReplacementTo(
+                                              context, const HomePage())
+                                        }
+                                      : {
+                                          AppSnackBar.showInSnackBar(
+                                              context: context,
+                                              message: 'something went wrong',
+                                              isSuccessful: false)
+                                        };
+                                });
+                              },
+                              child: AppText(
+                                  text: '  ${AppMessage.logInGoogle}  ',
+                                  color: AppColor.darkGray,
+                                  fontSize: AppSize.smallSubText - 2),
+                            ),
                             Flexible(
                               child: Divider(
                                 color: AppColor.lightGrey.withOpacity(.3),
@@ -128,7 +170,8 @@ class _LogInState extends State<LogIn> {
                           fontSize: AppSize.smallSubText - 2),
                       InkWell(
                           onTap: () {
-                            AppRoutes.pushReplacementTo(context, const SignUp());
+                            AppRoutes.pushReplacementTo(
+                                context, const SignUp());
                           },
                           child: AppText(
                             text: AppMessage.signUp,

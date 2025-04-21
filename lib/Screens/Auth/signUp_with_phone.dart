@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:scalp_pure/Screens/Auth/login.dart';
 import 'package:scalp_pure/Screens/Auth/sign_up.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
@@ -10,6 +11,9 @@ import 'package:scalp_pure/Widget/AppTextFields.dart';
 import 'package:scalp_pure/components/AppIcons.dart';
 import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
+import '../../BackEnd/provider_class.dart';
+import '../../Widget/AppDialog.dart';
+import '../../Widget/AppSnackBar.dart';
 import '../../components/AppColor.dart';
 import '../../components/AppMessage.dart';
 
@@ -44,8 +48,8 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.only(top: 30.h,right: 12.w, left: 12.w, bottom: 30.h),
+                  padding: EdgeInsets.only(
+                      top: 30.h, right: 12.w, left: 12.w, bottom: 30.h),
                   child: Column(
                     children: [
                       AppTextFields(
@@ -67,7 +71,6 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           ],
                           hintColor: AppColor.lightGrey,
                           hintText: 'phone number'),
-
                       SizedBox(
                         height: 15.h,
                       ),
@@ -76,7 +79,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           width: double.infinity,
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
                           onPressed: () {
-                            if(_key.currentState!.validate()){
+                            if (_key.currentState!.validate()) {
                               AppRoutes.pushReplacementTo(
                                   context, const HomePage());
                             }
@@ -102,10 +105,32 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                               height: 25.h,
                               width: 25.w,
                             ),
-                            AppText(
-                                text: '  ${AppMessage.signUpGoogle}  ',
-                                color: AppColor.darkGray,
-                                fontSize: AppSize.smallSubText - 2),
+                            InkWell(
+                              onTap: () async {
+                                AppDialog.showLoading(context: context);
+                                context
+                                    .read<ProviderClass>()
+                                    .signInWithGoogle()
+                                    .then((credential) {
+                                  Navigator.pop(con!);
+                                  credential != null
+                                      ? {
+                                          AppRoutes.pushReplacementTo(
+                                              context, const HomePage())
+                                        }
+                                      : {
+                                          AppSnackBar.showInSnackBar(
+                                              context: context,
+                                              message: 'something went wrong',
+                                              isSuccessful: false)
+                                        };
+                                });
+                              },
+                              child: AppText(
+                                  text: '  ${AppMessage.signUpGoogle}  ',
+                                  color: AppColor.darkGray,
+                                  fontSize: AppSize.smallSubText - 2),
+                            ),
                             Flexible(
                               child: Divider(
                                 color: AppColor.lightGrey.withOpacity(.3),
@@ -130,8 +155,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           fontSize: AppSize.smallSubText - 2),
                       InkWell(
                           onTap: () {
-                            AppRoutes.pushReplacementTo(
-                                context, const LogIn());
+                            AppRoutes.pushReplacementTo(context, const LogIn());
                           },
                           child: AppText(
                             text: AppMessage.login,

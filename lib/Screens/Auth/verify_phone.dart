@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +14,8 @@ import '../../components/AppColor.dart';
 import '../../components/AppMessage.dart';
 
 class VerifyPhone extends StatefulWidget {
-  const VerifyPhone({super.key});
+  final String verificationId;
+  const VerifyPhone({super.key, required this.verificationId});
 
   @override
   State<VerifyPhone> createState() => _VerifyPhoneState();
@@ -48,21 +50,25 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AppText(text: 'Enter pin sent to your phone', fontSize: AppSize.textSize, color: AppColor.darkGray,),
-                      SizedBox(height: 20.h,),
+                      AppText(
+                        text: 'Enter pin sent to your phone',
+                        fontSize: AppSize.textSize,
+                        color: AppColor.darkGray,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Pinput(
                         controller: pin,
-                        length: 6,
-                        validator: (value){
-                          if(value!.isEmpty){
+                        length: 4,
+                        validator: (value) {
+                          if (value!.isEmpty) {
                             return AppMessage.mandatoryTx;
                           }
                           return null;
                         },
                         errorTextStyle: TextStyle(
-                          color: AppColor.error,
-                          fontSize: AppSize.errorSize
-                        ),
+                            color: AppColor.error, fontSize: AppSize.errorSize),
                         defaultPinTheme: PinTheme(
                             width: 56,
                             height: 56,
@@ -83,8 +89,12 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                           height: 45.h,
                           width: double.infinity,
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_key.currentState!.validate()) {
+                              final cred = PhoneAuthProvider.credential(
+                                  verificationId: widget.verificationId,
+                                  smsCode: pin.text);
+                              await FirebaseAuth.instance.signInWithCredential(cred);
                               AppRoutes.pushReplacementTo(
                                   context, const HomePage());
                             }

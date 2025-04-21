@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scalp_pure/BackEnd/class_models.dart';
 import '../Screens/Home/product_details.dart';
 import '../components/AppMessage.dart';
@@ -10,6 +12,8 @@ import '../components/AppRoutes.dart';
 ///=================================================================
 class ProviderClass extends ChangeNotifier {
   DataHandle<List<Product>> products = DataHandle(result: AppMessage.initial);
+
+  final auth = FirebaseAuth.instance;
 
   List<String> kBuildUpChemicalsList = [
     "sodium lauryl sulfate",
@@ -52,6 +56,23 @@ class ProviderClass extends ChangeNotifier {
     "fragrance",
   ];
 
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+
+      final googleAuth = await googleUser?.authentication;
+
+      final cred = GoogleAuthProvider.credential(
+          idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+
+      return await auth.signInWithCredential(cred);
+    } catch (e) {
+      print('========================== $e');
+    }
+
+    return null;
+  }
+
   Future testProduct({required context, required File image}) async {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     final RecognizedText recognizedText =
@@ -63,16 +84,16 @@ class ProviderClass extends ChangeNotifier {
     for (TextBlock block in recognizedText.blocks) {
       ingredients = block.text.split(',');
 
-        for (String ingredient in ingredients) {
-          print('ingredient ${ingredient.toLowerCase().trim()}');
+      for (String ingredient in ingredients) {
+        print('ingredient ${ingredient.toLowerCase().trim()}');
 
-          kBuildUpChemicalsList.forEach((element) {
-            if (ingredient.toLowerCase().trim().contains(element) && !buildingUpChemicals.contains(ingredient)) {
-              buildingUpChemicals.add(ingredient);
-            }
-          });
-        }
-
+        kBuildUpChemicalsList.forEach((element) {
+          if (ingredient.toLowerCase().trim().contains(element) &&
+              !buildingUpChemicals.contains(ingredient)) {
+            buildingUpChemicals.add(ingredient);
+          }
+        });
+      }
     }
 
     Product product =

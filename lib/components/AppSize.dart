@@ -10,6 +10,6 @@ class AppSize {
   static double appBarIconsSize = 18.spMax;
   static double smallSubText = 14.spMax;
   static double textSize = 15.spMax;
-  static double snackBarTextSize = 14.spMax;
+  static double snackBarTextSize = 12.spMax;
   static double errorSize = 13.spMax;
 }

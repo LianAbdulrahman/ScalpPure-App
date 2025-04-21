@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import '../Screens/Auth/sign_up.dart';
 import '../components/AppColor.dart';
 import '../components/AppIcons.dart';
 import '../components/AppSize.dart';
@@ -13,6 +14,7 @@ class AppDialog {
         barrierDismissible: true,
         context: context,
         builder: (context) {
+          con = context;
           return AlertDialog(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -21,10 +23,11 @@ class AppDialog {
             backgroundColor: Colors.transparent,
             content: Container(
               alignment: AlignmentDirectional.center,
-              child: LottieBuilder.asset(
-                'assets/lottie/raffle.json',
-                height: 250.h,
-              ),
+              child: CircularProgressIndicator(color: AppColor.white,),
+              // child: LottieBuilder.asset(
+              //   'assets/lottie/raffle.json',
+              //   height: 250.h,
+              // ),
             ),
           );
         });

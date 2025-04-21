@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:scalp_pure/Screens/Auth/login.dart';
 import 'package:scalp_pure/Screens/Auth/signUp_with_phone.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
+import 'package:scalp_pure/Widget/AppDialog.dart';
+import 'package:scalp_pure/Widget/AppSnackBar.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
+import '../../BackEnd/provider_class.dart';
 import '../../components/AppColor.dart';
 import '../../components/AppMessage.dart';
+
+BuildContext? con;
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -36,8 +42,7 @@ class _SignUpState extends State<SignUp> {
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 60.h, left: 5.w, right: 5.w),
+                  padding: EdgeInsets.only(bottom: 60.h, left: 5.w, right: 5.w),
                   child: AppText(
                     text: AppMessage.mainTitle,
                     fontSize: AppSize.titleSize - 0.5,
@@ -50,8 +55,7 @@ class _SignUpState extends State<SignUp> {
                     width: double.infinity,
                     backgroundColor: AppColor.lightGreen.withOpacity(.4),
                     onPressed: () {
-                      AppRoutes.pushReplacementTo(
-                          context, const SignUpPhone());
+                      AppRoutes.pushReplacementTo(context, const SignUpPhone());
                     },
                     icon: Padding(
                       padding: EdgeInsets.only(right: 10.w),
@@ -75,8 +79,25 @@ class _SignUpState extends State<SignUp> {
                         color: AppColor.white,
                       ),
                     ),
-                    onPressed: () {
-                      AppRoutes.pushReplacementTo(context, const HomePage());
+                    onPressed: () async {
+                      AppDialog.showLoading(context: context);
+                      await context
+                          .read<ProviderClass>()
+                          .signInWithGoogle()
+                          .then((credential) {
+                        Navigator.pop(con!);
+                        credential != null
+                            ? {
+                                AppRoutes.pushReplacementTo(
+                                    context, const HomePage()),
+                              }
+                            : {
+                                AppSnackBar.showInSnackBar(
+                                    context: context,
+                                    message: 'something went wrong',
+                                    isSuccessful: false)
+                              };
+                      });
                     },
                     textStyleColor: AppColor.white,
                     text: AppMessage.signUpGoogle),

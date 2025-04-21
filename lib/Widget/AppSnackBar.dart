@@ -29,7 +29,7 @@ class AppSnackBar extends StatelessWidget {
         decoration: BoxDecoration(
             color: isSuccessful
                 ? AppColor.green.withOpacity(0.08)
-                : AppColor.error.withOpacity(0.08),
+                : AppColor.error,
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
               width: 1,

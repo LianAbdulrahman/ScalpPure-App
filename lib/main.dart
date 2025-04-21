@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +10,17 @@ import 'components/AppMessage.dart';
 
 Future<void> main() async {
   await ScreenUtil.ensureScreenSize();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    name: 'ScalpPure',
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyAhVpwBOdiYmeZ4jzR1vviT-aV1vWqXWJA",
+      appId: "1:477093710050:android:db57d514d443aa736e76bb",
+      messagingSenderId: "477093710050",
+      projectId: "scalppure-2bff4",
+    ),
+  );
   runApp(const MyApp());
 }
 
