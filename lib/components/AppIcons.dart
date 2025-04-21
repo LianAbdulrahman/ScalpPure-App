@@ -14,5 +14,7 @@ class AppIcons {
   static IconData close = Icons.close;
   static IconData info = FluentIcons.info_12_filled;
   static IconData done = FluentIcons.checkmark_12_filled;
+  static IconData show = FluentIcons.eye_12_filled;
+  static IconData hide = FluentIcons.eye_off_16_filled;
 
 }

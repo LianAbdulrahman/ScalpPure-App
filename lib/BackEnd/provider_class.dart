@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -58,6 +57,8 @@ class ProviderClass extends ChangeNotifier {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
+      await GoogleSignIn().signOut();
+
       final googleUser = await GoogleSignIn().signIn();
 
       final googleAuth = await googleUser?.authentication;
@@ -71,6 +72,29 @@ class ProviderClass extends ChangeNotifier {
     }
 
     return null;
+  }
+
+  Future signUpWithEmail(
+      {required String email, required String password}) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return true;
+    } catch (e) {
+      print('========================== $e');
+      return false;
+    }
+  }
+
+  Future logInWithEmail(
+      {required String email, required String password}) async {
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      return true;
+    } catch (e) {
+      print('========================== $e');
+      return false;
+    }
   }
 
   Future testProduct({required context, required File image}) async {

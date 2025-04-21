@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/Screens/Auth/login.dart';
-import 'package:scalp_pure/Screens/Auth/signUp_with_phone.dart';
+import 'package:scalp_pure/Screens/Auth/signUp_with_email.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppDialog.dart';
@@ -60,12 +60,13 @@ class _SignUpState extends State<SignUp> {
                     icon: Padding(
                       padding: EdgeInsets.only(right: 10.w),
                       child: Icon(
-                        Icons.phone,
+                        Icons.email,
                         color: AppColor.grayGreen,
+                        size: AppSize.appBarIconsSize + 10,
                       ),
                     ),
                     textStyleColor: AppColor.grayGreen,
-                    text: AppMessage.signUpPhone),
+                    text: AppMessage.signUpEmail),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -74,8 +75,10 @@ class _SignUpState extends State<SignUp> {
                     width: double.infinity,
                     icon: Padding(
                       padding: EdgeInsets.only(right: 10.w),
-                      child: Icon(
-                        Icons.mail,
+                      child: Image.asset(
+                        'assets/images/google.png',
+                        height: 25.h,
+                        width: 25.w,
                         color: AppColor.white,
                       ),
                     ),

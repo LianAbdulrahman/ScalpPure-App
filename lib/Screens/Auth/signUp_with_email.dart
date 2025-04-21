@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,8 +28,11 @@ class SignUpPhone extends StatefulWidget {
 class _SignUpPhoneState extends State<SignUpPhone> {
   final _key = GlobalKey<FormState>();
 
-  TextEditingController phone = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
+  bool hidePassword = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,24 +57,82 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                   child: Column(
                     children: [
                       AppTextFields(
-                          validator: (phone) {
-                            if (phone!.trim().isEmpty) {
+                          validator: (email) {
+                            if (email!.trim().isEmpty) {
                               return AppMessage.mandatoryTx;
                             }
-                            if (!phone.startsWith('0')) {
-                              return AppMessage.startWith0;
-                            }
-                            if (phone.length != 10) {
-                              return AppMessage.noLessThan10;
+                            if (EmailValidator.validate(email.trim()) ==
+                                false) {
+                              return AppMessage.invalidEmail;
                             }
                             return null;
                           },
-                          controller: phone,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
+                          controller: email,
                           hintColor: AppColor.lightGrey,
-                          hintText: 'phone number'),
+                          hintText: 'Email'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      AppTextFields(
+                          validator: (password) {
+                            if (password!.trim().isEmpty) {
+                              return AppMessage.mandatoryTx;
+                            }
+                            if (password.length < 8) {
+                              return 'password should be at least 8 characters';
+                            }
+                            return null;
+                          },
+                          controller: password,
+                          obscureText: hidePassword,
+                          hintColor: AppColor.lightGrey,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                hidePassword = !hidePassword;
+                              });
+                            },
+                            icon: hidePassword
+                                ? Icon(
+                                    AppIcons.hide,
+                                    color: AppColor.darkGray,
+                                  )
+                                : Icon(AppIcons.show, color: AppColor.darkGray),
+                          ),
+                          hintText: 'Password'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      AppTextFields(
+                          validator: (confirmPassword) {
+                            if (confirmPassword!.trim().isEmpty) {
+                              return AppMessage.mandatoryTx;
+                            }
+                            if (confirmPassword.length < 8) {
+                              return 'password should be at least 8 characters';
+                            }
+                            if (confirmPassword != password.text) {
+                              return 'password and confirm password do not match';
+                            }
+                            return null;
+                          },
+                          controller: confirmPassword,
+                          obscureText: hidePassword,
+                          hintColor: AppColor.lightGrey,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                hidePassword = !hidePassword;
+                              });
+                            },
+                            icon: hidePassword
+                                ? Icon(
+                                    AppIcons.hide,
+                                    color: AppColor.darkGray,
+                                  )
+                                : Icon(AppIcons.show, color: AppColor.darkGray),
+                          ),
+                          hintText: 'Confirm Password'),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -78,10 +140,28 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           height: 45.h,
                           width: double.infinity,
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_key.currentState!.validate()) {
-                              AppRoutes.pushReplacementTo(
-                                  context, const HomePage());
+                              AppDialog.showLoading(context: context);
+                              context
+                                  .read<ProviderClass>()
+                                  .signUpWithEmail(
+                                      email: email.text,
+                                      password: password.text)
+                                  .then((result) {
+                                Navigator.pop(con!);
+                                result
+                                    ? {
+                                        AppRoutes.pushReplacementTo(
+                                            context, const HomePage())
+                                      }
+                                    : {
+                                        AppSnackBar.showInSnackBar(
+                                            context: context,
+                                            message: 'something went wrong',
+                                            isSuccessful: false)
+                                      };
+                              });
                             }
                           },
                           textStyleColor: AppColor.grayGreen,

@@ -28,11 +28,11 @@ class AppMessage {
   static String productDetailsTitle = 'Scalp Building up Chemicals';
   static String mainTitle = 'Make right choices for your hair health!';
 
-  static String signUpPhone = 'Sign up with phone';
+  static String signUpEmail = 'Sign up with email';
   static String signUpGoogle = 'Sign up with Google';
   static String youHaveAccount = 'You already have account?';
   static String login = ' LogIn';
-  static String logInPhone = 'LogIn with phone';
+  static String logInEmail = 'LogIn with email';
   static String logInGoogle = 'Continue with Google';
   static String youDoNotHaveAccount = 'You do not have account?';
   static String signUp = ' SignUp';
@@ -47,7 +47,5 @@ class AppMessage {
   static String allowedExtensions = ' image allowed extensions are png or jpg';
   static String editPhoto = 'Edit Photo';
   static String mandatoryTx = 'required field';
-  static String startWith0 = 'phone number should start with number 0';
-  static String noLessThan10 = "phone number should be 10 digits";
-  static String verify = "Verify";
+  static String invalidEmail = 'email is invalid';
 }

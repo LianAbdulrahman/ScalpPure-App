@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/BackEnd/provider_class.dart';
 import 'package:scalp_pure/Screens/Auth/sign_up.dart';
-import 'package:scalp_pure/Screens/Auth/verify_phone.dart';
 import 'package:scalp_pure/Screens/Home/home_page.dart';
 import 'package:scalp_pure/Widget/AppButtons.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
@@ -16,6 +14,7 @@ import 'package:scalp_pure/components/AppSize.dart';
 import '../../Widget/AppDialog.dart';
 import '../../Widget/AppSnackBar.dart';
 import '../../components/AppColor.dart';
+import '../../components/AppIcons.dart';
 import '../../components/AppMessage.dart';
 
 class LogIn extends StatefulWidget {
@@ -28,7 +27,10 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   final _key = GlobalKey<FormState>();
 
-  TextEditingController phone = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  bool hidePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -54,24 +56,46 @@ class _LogInState extends State<LogIn> {
                   child: Column(
                     children: [
                       AppTextFields(
+                          validator: (email) {
+                            if (email!.trim().isEmpty) {
+                              return AppMessage.mandatoryTx;
+                            }
+                            if (EmailValidator.validate(email.trim()) ==
+                                false) {
+                              return AppMessage.invalidEmail;
+                            }
+                            return null;
+                          },
+                          controller: email,
+                          hintColor: AppColor.lightGrey,
+                          hintText: 'Email'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      AppTextFields(
                           validator: (phone) {
                             if (phone!.trim().isEmpty) {
                               return AppMessage.mandatoryTx;
                             }
-                            if (!phone.startsWith('0')) {
-                              return AppMessage.startWith0;
-                            }
-                            if (phone.length != 9) {
-                              return AppMessage.noLessThan10;
-                            }
                             return null;
                           },
-                          controller: phone,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
+                          controller: password,
+                          obscureText: hidePassword,
                           hintColor: AppColor.lightGrey,
-                          hintText: 'phone number'),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                hidePassword = !hidePassword;
+                              });
+                            },
+                            icon: hidePassword
+                                ? Icon(
+                                    AppIcons.hide,
+                                    color: AppColor.darkGray,
+                                  )
+                                : Icon(AppIcons.show, color: AppColor.darkGray),
+                          ),
+                          hintText: 'Password'),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -81,22 +105,27 @@ class _LogInState extends State<LogIn> {
                           backgroundColor: AppColor.lightGreen.withOpacity(.4),
                           onPressed: () async {
                             if (_key.currentState!.validate()) {
-                              await FirebaseAuth.instance.verifyPhoneNumber(
-                                  phoneNumber: '+966 543 646 975',
-                                  verificationCompleted: (PhoneAuthCredential
-                                      phoneAuthCredential) {},
-                                  verificationFailed:
-                                      (FirebaseAuthException error) {},
-                                  codeSent: (String verificationId,
-                                      int? forceResendingToken) {
-                                    AppRoutes.pushReplacementTo(
-                                        context,
-                                        VerifyPhone(
-                                          verificationId: verificationId,
-                                        ));
-                                  },
-                                  codeAutoRetrievalTimeout:
-                                      (String verificationId) {});
+                              AppDialog.showLoading(context: context);
+                              context
+                                  .read<ProviderClass>()
+                                  .logInWithEmail(
+                                      email: email.text,
+                                      password: password.text)
+                                  .then((result) {
+                                Navigator.pop(con!);
+                                result
+                                    ? {
+                                        AppRoutes.pushReplacementTo(
+                                            context, const HomePage())
+                                      }
+                                    : {
+                                        AppSnackBar.showInSnackBar(
+                                            context: context,
+                                            message:
+                                                'email or password is incorrect',
+                                            isSuccessful: false)
+                                      };
+                              });
                             }
                           },
                           textStyleColor: AppColor.grayGreen,
