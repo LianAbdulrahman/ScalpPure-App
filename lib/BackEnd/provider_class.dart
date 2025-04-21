@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:scalp_pure/BackEnd/class_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Screens/Home/product_details.dart';
 import '../components/AppMessage.dart';
 import '../components/AppRoutes.dart';
@@ -13,6 +14,7 @@ class ProviderClass extends ChangeNotifier {
   DataHandle<List<Product>> products = DataHandle(result: AppMessage.initial);
 
   final auth = FirebaseAuth.instance;
+  String? token;
 
   List<String> kBuildUpChemicalsList = [
     "sodium lauryl sulfate",
@@ -55,6 +57,28 @@ class ProviderClass extends ChangeNotifier {
     "fragrance",
   ];
 
+  Future checkToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    token = pref.getString('token');
+    return token;
+  }
+
+  Future saveToken({required String? token}) async {
+    print('token token $token');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (token != null) {
+      await pref.setString('token', token!);
+    }
+  }
+
+  Future deleteToken({required String? token}) async {
+    print('token token $token');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (token != null) {
+      await pref.setString('token', token!);
+    }
+  }
+
   Future<UserCredential?> signInWithGoogle() async {
     try {
       await GoogleSignIn().signOut();
@@ -65,6 +89,7 @@ class ProviderClass extends ChangeNotifier {
 
       final cred = GoogleAuthProvider.credential(
           idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+      saveToken(token: cred?.accessToken);
 
       return await auth.signInWithCredential(cred);
     } catch (e) {
@@ -77,8 +102,11 @@ class ProviderClass extends ChangeNotifier {
   Future signUpWithEmail(
       {required String email, required String password}) async {
     try {
-      await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((cred) {
+        saveToken(token: cred.credential?.accessToken);
+      });
       return true;
     } catch (e) {
       print('========================== $e');
@@ -89,12 +117,21 @@ class ProviderClass extends ChangeNotifier {
   Future logInWithEmail(
       {required String email, required String password}) async {
     try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((cred) async {
+        String? token = await cred.user?.getIdToken();
+        saveToken(token: token);
+      });
       return true;
     } catch (e) {
       print('========================== $e');
       return false;
     }
+  }
+
+  Future logOut() async {
+    await auth.signOut();
   }
 
   Future testProduct({required context, required File image}) async {
