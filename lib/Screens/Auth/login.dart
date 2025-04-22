@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/BackEnd/provider_class.dart';
@@ -68,7 +67,7 @@ class _LogInState extends State<LogIn> {
                           },
                           controller: email,
                           hintColor: AppColor.lightGrey,
-                          hintText: 'Email'),
+                          hintText: AppMessage.email),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -95,7 +94,7 @@ class _LogInState extends State<LogIn> {
                                   )
                                 : Icon(AppIcons.show, color: AppColor.darkGray),
                           ),
-                          hintText: 'Password'),
+                          hintText: AppMessage.password),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -122,7 +121,7 @@ class _LogInState extends State<LogIn> {
                                         AppSnackBar.showInSnackBar(
                                             context: context,
                                             message:
-                                                'email or password is incorrect',
+                                                AppMessage.wrongCredentials,
                                             isSuccessful: false)
                                       };
                               });
@@ -165,7 +164,8 @@ class _LogInState extends State<LogIn> {
                                       : {
                                           AppSnackBar.showInSnackBar(
                                               context: context,
-                                              message: 'something went wrong',
+                                              message:
+                                                  AppMessage.somethingWrong,
                                               isSuccessful: false)
                                         };
                                 });

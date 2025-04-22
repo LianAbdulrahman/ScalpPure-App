@@ -27,7 +27,6 @@ class AppMessage {
   static String appName = 'Scalp Pure';
   static String productDetailsTitle = 'Scalp Building up Chemicals';
   static String mainTitle = 'Make right choices for your hair health!';
-
   static String signUpEmail = 'Sign up with email';
   static String signUpGoogle = 'Sign up with Google';
   static String youHaveAccount = 'You already have account?';
@@ -44,8 +43,16 @@ class AppMessage {
       "please enable storage permission to continue";
   static String photoPermission = "please enable photo permission to continue";
   static String tryAgain = 'something went wrong please try again later';
+  static String somethingWrong = 'something went wrong';
   static String allowedExtensions = ' image allowed extensions are png or jpg';
   static String editPhoto = 'Edit Photo';
   static String mandatoryTx = 'required field';
   static String invalidEmail = 'email is invalid';
+  static String email = 'Email';
+  static String password = 'Password';
+  static String confirmPassword = 'Confirm Password';
+  static String wrongCredentials = 'email or password is incorrect';
+  static String noLessThan8 = 'password should be at least 8 characters';
+  static String noMatch = 'password and confirm password do not match';
+
 }

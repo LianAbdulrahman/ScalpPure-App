@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/Screens/Auth/login.dart';
@@ -69,7 +68,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                           },
                           controller: email,
                           hintColor: AppColor.lightGrey,
-                          hintText: 'Email'),
+                          hintText: AppMessage.email),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -79,7 +78,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                               return AppMessage.mandatoryTx;
                             }
                             if (password.length < 8) {
-                              return 'password should be at least 8 characters';
+                              return AppMessage.noLessThan8;
                             }
                             return null;
                           },
@@ -99,7 +98,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                                   )
                                 : Icon(AppIcons.show, color: AppColor.darkGray),
                           ),
-                          hintText: 'Password'),
+                          hintText: AppMessage.password),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -109,10 +108,10 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                               return AppMessage.mandatoryTx;
                             }
                             if (confirmPassword.length < 8) {
-                              return 'password should be at least 8 characters';
+                              return AppMessage.noLessThan8;
                             }
                             if (confirmPassword != password.text) {
-                              return 'password and confirm password do not match';
+                              return AppMessage.noMatch;
                             }
                             return null;
                           },
@@ -132,7 +131,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                                   )
                                 : Icon(AppIcons.show, color: AppColor.darkGray),
                           ),
-                          hintText: 'Confirm Password'),
+                          hintText: AppMessage.confirmPassword),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -158,7 +157,7 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                                     : {
                                         AppSnackBar.showInSnackBar(
                                             context: context,
-                                            message: 'something went wrong',
+                                            message: AppMessage.somethingWrong,
                                             isSuccessful: false)
                                       };
                               });
@@ -201,7 +200,8 @@ class _SignUpPhoneState extends State<SignUpPhone> {
                                       : {
                                           AppSnackBar.showInSnackBar(
                                               context: context,
-                                              message: 'something went wrong',
+                                              message:
+                                                  AppMessage.somethingWrong,
                                               isSuccessful: false)
                                         };
                                 });

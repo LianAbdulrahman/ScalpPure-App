@@ -97,7 +97,7 @@ class _SignUpState extends State<SignUp> {
                             : {
                                 AppSnackBar.showInSnackBar(
                                     context: context,
-                                    message: 'something went wrong',
+                                    message: AppMessage.somethingWrong,
                                     isSuccessful: false)
                               };
                       });
