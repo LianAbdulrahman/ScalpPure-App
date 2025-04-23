@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/BackEnd/class_models.dart';
+import 'package:scalp_pure/BackEnd/post_api.dart';
 import 'package:scalp_pure/BackEnd/provider_class.dart';
 import 'package:scalp_pure/Screens/Home/product_details.dart';
 import 'package:scalp_pure/Widget/AppDialog.dart';
@@ -102,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         FloatingActionButton.small(
           backgroundColor: AppColor.grayGreen,
-          onPressed: () {
+          onPressed: () async {
             openCamera();
           },
           shape: const CircleBorder(),
