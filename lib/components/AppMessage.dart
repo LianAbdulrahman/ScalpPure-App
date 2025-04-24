@@ -9,21 +9,6 @@ class AppMessage {
   static String loading = 'loading';
   static String loadingMore = 'loading more';
   static String loaded = 'loaded';
-
-  static Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
-  static Map<String, String> headersWithToken({required String? token}) => {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
-      };
-  static Map<String, String> headersMultiFile({required String? token}) => {
-        'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
-      };
   static String appName = 'Scalp Pure';
   static String productDetailsTitle = 'Scalp Building up Chemicals';
   static String mainTitle = 'Make right choices for your hair health!';
@@ -55,4 +40,8 @@ class AppMessage {
   static String noLessThan8 = 'password should be at least 8 characters';
   static String noMatch = 'password and confirm password do not match';
 
+  static String delete = 'delete';
+  static String deleteMessage = 'are you sure you want to delete?';
+  static String confirm = 'confirm';
+  static String cancel = 'cancel';
 }

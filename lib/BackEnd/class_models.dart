@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum NotificationType { alert, order }
 
 class DataHandle<T> {
@@ -11,8 +13,17 @@ class DataHandle<T> {
 }
 
 class Product {
+  String? id;
   File? image;
-  List<String> buildingUpChemicals = [];
+  List<dynamic> buildingUpChemicals = [];
+  Timestamp? date;
 
-  Product({required this.image, required this.buildingUpChemicals});
+  Product({required this.image, required this.buildingUpChemicals, this.date ,this.id});
+
+  static Product fromJson(Map<String, dynamic> json) {
+    return Product(
+        image: File(json['image']),
+        buildingUpChemicals: json['chemicals'],
+        date: json['date']);
+  }
 }

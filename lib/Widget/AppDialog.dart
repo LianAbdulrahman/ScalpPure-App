@@ -39,7 +39,8 @@ class AppDialog {
         barrierDismissible: false,
         barrierColor: AppColor.black.withOpacity(.3),
         context: context,
-        builder: (cont) {
+        builder: (context) {
+          con = context;
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Column(
@@ -69,7 +70,7 @@ class AppDialog {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.pop(cont);
+                                      Navigator.pop(context);
                                     },
                                     icon: Icon(
                                       AppIcons.backArrow,

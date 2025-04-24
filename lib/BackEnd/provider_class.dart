@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -145,6 +147,7 @@ class ProviderClass extends ChangeNotifier {
   Future logOut({required context}) async {
     await auth.signOut();
     await deleteToken();
+    emptyProvider();
     AppRoutes.pushAndRemoveAllPageTo(context, const SignUp());
   }
 
@@ -161,8 +164,6 @@ class ProviderClass extends ChangeNotifier {
       ingredients = block.text.split(',');
 
       for (String ingredient in ingredients) {
-        print('ingredient ${ingredient.toLowerCase().trim()}');
-
         kBuildUpChemicalsList.forEach((element) {
           if (ingredient.toLowerCase().trim().contains(element) &&
               !buildingUpChemicals.contains(ingredient)) {
@@ -179,8 +180,11 @@ class ProviderClass extends ChangeNotifier {
       Navigator.pop(con!);
       result
           ? {
-              AppRoutes.pushTo(
-                  context, ProductDetail(isFile: true, product: product))
+              AppRoutes.pushThenRefresh(
+                  context, ProductDetail(isFile: true, product: product),
+                  then: (v) {
+                getProducts();
+              })
             }
           : {
               AppSnackBar.showInSnackBar(
@@ -189,5 +193,63 @@ class ProviderClass extends ChangeNotifier {
                   isSuccessful: false)
             };
     });
+  }
+
+  Future getProducts() async {
+    debugPrint('getting Products ... !');
+    try {
+      products.result = AppMessage.loading;
+      products.data = [];
+      notifyListeners();
+
+      List<Product> tempList = [];
+
+      DocumentSnapshot<Map<String, dynamic>> collection =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(auth.currentUser?.uid)
+              .get();
+
+      CollectionReference<Map<String, dynamic>> data =
+          collection.reference.collection('products');
+
+      Stream<QuerySnapshot<Map<String, dynamic>>>? snapshots =
+          data?.snapshots();
+
+      snapshots?.forEach((e) {
+        for (var data in e.docs) {
+          Product product = Product.fromJson(data.data());
+          product.id = data.id;
+          tempList.add(product);
+        }
+      });
+
+      products.data = tempList;
+      products.result = AppMessage.loaded;
+      await Future.delayed(const Duration(seconds: 2));
+      notifyListeners();
+    } catch (e) {
+      if (e is FormatException) {
+        products.result = AppMessage.formatException;
+        notifyListeners();
+        return AppMessage.formatException;
+      } else if (e is SocketException) {
+        products.result = AppMessage.socketException;
+        notifyListeners();
+        return AppMessage.socketException;
+      } else if (e is TimeoutException) {
+        products.result = AppMessage.timeoutException;
+        notifyListeners();
+        return AppMessage.timeoutException;
+      } else {
+        products.result = AppMessage.serverExceptions;
+        notifyListeners();
+        return AppMessage.serverExceptions;
+      }
+    }
+  }
+
+  emptyProvider() {
+    products = DataHandle(result: AppMessage.initial, data: []);
   }
 }

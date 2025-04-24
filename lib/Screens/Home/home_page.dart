@@ -20,6 +20,9 @@ import 'package:scalp_pure/components/AppRoutes.dart';
 import 'package:scalp_pure/components/AppSize.dart';
 import 'package:scalp_pure/components/GeneralWidget.dart';
 
+import '../../Widget/AppButtons.dart';
+import '../Auth/sign_up.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -29,6 +32,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File? image;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getData();
+    });
+
+    super.initState();
+  }
+
+  getData() async {
+    await context.read<ProviderClass>().getProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +63,32 @@ class _HomePageState extends State<HomePage> {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-            padding: EdgeInsets.only(top: 8.h),
-            itemCount: 2,
-            itemBuilder: (_, i) => productContainer(index: i)),
+        child: Selector<ProviderClass, String>(
+            selector: (_, provider) => provider.products.result,
+            builder: (context, result, child) {
+              return result == AppMessage.loading
+                  ? UnconstrainedBox(
+                      child: SizedBox(
+                          height: 35.h,
+                          width: 35.h,
+                          child: CircularProgressIndicator(
+                              color: AppColor.grayGreen)))
+                  : result == AppMessage.loaded
+                      ? Selector<ProviderClass, List<Product>>(
+                          selector: (_, provider) => provider.products.data!,
+                          builder: (context, list, child) {
+                            return ListView.builder(
+                                padding: EdgeInsets.only(top: 8.h),
+                                itemCount: list.length,
+                                itemBuilder: (_, i) =>
+                                    productContainer(product: list[i]));
+                          })
+                      : Center(
+                          child: AppText(
+                              text: AppMessage.somethingWrong,
+                              fontSize: AppSize.appBarTextSize + 3),
+                        );
+            }),
       ),
     );
   }
@@ -103,6 +141,7 @@ class _HomePageState extends State<HomePage> {
       ),
       children: [
         FloatingActionButton.small(
+          heroTag: "btn1",
           backgroundColor: AppColor.grayGreen,
           onPressed: () async {
             openCamera();
@@ -114,6 +153,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         FloatingActionButton.small(
+          heroTag: "btn2",
           backgroundColor: AppColor.grayGreen,
           shape: const CircleBorder(),
           child: Icon(
@@ -134,67 +174,152 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  productContainer({required int index}) {
+  productContainer({required Product product}) {
     return InkWell(
       onTap: () {
         AppRoutes.pushTo(
             context,
             ProductDetail(
-              isFile: false,
-              product: Product(
-                  image: File('assets/images/productTest.jpeg'),
-                  buildingUpChemicals: [
-                    'Building-up Ingredient 1',
-                    'Building-up Ingredient 2',
-                    'Building-up Ingredient 3'
-                  ]),
+              isFile: true,
+              product: product,
             ));
       },
-      child: Container(
-        height: 165.h,
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w),
-        decoration: GeneralWidget.decoration(),
-        child: Column(
-          children: [
-            Flexible(
-                flex: 3,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.r),
-                        topLeft: Radius.circular(10.r)),
-                    child: Image.asset(
-                      'assets/images/productTest.jpeg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )),
-            Flexible(
-                child: Padding(
-              padding: EdgeInsets.only(top: 8.h, left: 10.w, right: 10.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Dismissible(
+        background: Container(
+          margin: EdgeInsets.all(5.r),
+          padding: EdgeInsets.all(10.r),
+          color: AppColor.error,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  AppText(
-                    text: 'Monday, March/03 ',
-                    fontSize: AppSize.textSize,
-                    color: AppColor.darkGray.withOpacity(.6),
+                  Icon(
+                    AppIcons.delete,
+                    color: AppColor.white,
+                    size: AppSize.appBarIconsSize + 2,
                   ),
-                  CircleAvatar(
-                    radius: 15.r,
-                    backgroundColor:
-                        index == 0 ? AppColor.error : AppColor.green,
-                    child: Icon(
-                      index == 0 ? AppIcons.close : AppIcons.done,
-                      color: AppColor.white,
-                    ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  AppText(
+                    text: AppMessage.delete,
+                    fontSize: AppSize.subTitle,
+                    color: AppColor.white,
                   )
                 ],
               ),
-            ))
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AppText(
+                    text: AppMessage.delete,
+                    fontSize: AppSize.subTitle,
+                    color: AppColor.white,
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  Icon(
+                    AppIcons.delete,
+                    color: AppColor.white,
+                    size: AppSize.appBarIconsSize + 2,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        confirmDismiss: (confirmed) async {
+          return await AppDialog.infoDialogue(
+              context: context,
+              title: AppMessage.delete,
+              message: AppMessage.deleteMessage,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 20.spMin,right: 20.spMin, bottom: 20.spMin),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AppButtons(
+                        height: 35.h,
+                        width: 110.w,
+                        backgroundColor: AppColor.error,
+                        textStyleColor: AppColor.white,
+                        onPressed: () async {
+                          Navigator.of(con!).pop(true);
+                          AppDialog.showLoading(context: context);
+                          await PostApi.deleteProduct(context:context, productId: product.id!);
+                         Navigator.pop(con!);
+                        },
+                        text: AppMessage.confirm),
+                    AppButtons(
+                        height: 35.h,
+                        width: 110.w,
+                        textStyleColor: AppColor.white,
+                        backgroundColor: AppColor.darkGray.withOpacity(.5),
+                        onPressed: () {
+                          Navigator.of(con!).pop(false);
+                        },
+                        text: AppMessage.cancel),
+                  ],
+                ),
+              ));
+        },
+        key: const Key(''),
+        child: Container(
+          height: 165.h,
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w),
+          decoration: GeneralWidget.decoration(),
+          child: Column(
+            children: [
+              Flexible(
+                  flex: 3,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10.r),
+                          topLeft: Radius.circular(10.r)),
+                      child: Image.file(
+                        product.image!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, ___, __) => Container(
+                          color: AppColor.lightGrey.withOpacity(.5),
+                        ),
+                      ),
+                    ),
+                  )),
+              Flexible(
+                  child: Padding(
+                padding: EdgeInsets.only(top: 8.h, left: 10.w, right: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AppText(
+                      text: product.date!.toDate().toString(),
+                      fontSize: AppSize.textSize,
+                      color: AppColor.darkGray.withOpacity(.6),
+                    ),
+                    CircleAvatar(
+                      radius: 15.r,
+                      backgroundColor: product.buildingUpChemicals.isNotEmpty
+                          ? AppColor.error
+                          : AppColor.green,
+                      child: Icon(
+                        product.buildingUpChemicals.isNotEmpty
+                            ? AppIcons.close
+                            : AppIcons.done,
+                        color: AppColor.white,
+                      ),
+                    )
+                  ],
+                ),
+              ))
+            ],
+          ),
         ),
       ),
     );
