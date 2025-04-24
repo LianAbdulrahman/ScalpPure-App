@@ -80,6 +80,7 @@ class ProviderClass extends ChangeNotifier {
     if (userId != null) {
       await pref.setString('userId', userId!);
     }
+    await checkToken();
   }
 
   Future deleteToken() async {
