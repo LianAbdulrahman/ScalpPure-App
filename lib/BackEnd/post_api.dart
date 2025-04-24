@@ -29,7 +29,6 @@ class PostApi {
   static Future deleteProduct(
       {required BuildContext context, required String productId}) async {
     try {
-      print(productId);
       await FirebaseFirestore.instance
           .collection('users')
           .doc('${context.read<ProviderClass>().userId}')

@@ -11,6 +11,7 @@ import 'package:scalp_pure/BackEnd/provider_class.dart';
 import 'package:scalp_pure/Screens/Home/product_details.dart';
 import 'package:scalp_pure/Widget/AppDialog.dart';
 import 'package:scalp_pure/Widget/AppPicker.dart';
+import 'package:scalp_pure/Widget/AppSnackBar.dart';
 import 'package:scalp_pure/Widget/AppText.dart';
 import 'package:scalp_pure/components/AppColor.dart';
 import 'package:camera_camera/camera_camera.dart';
@@ -59,6 +60,16 @@ class _HomePageState extends State<HomePage> {
           fontSize: AppSize.appBarTextSize,
           color: AppColor.white,
         ),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await context.read<ProviderClass>().logOut(context: context);
+              },
+              icon: Icon(
+                Icons.logout,
+                color: AppColor.white,
+              ))
+        ],
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -238,7 +249,7 @@ class _HomePageState extends State<HomePage> {
               message: AppMessage.deleteMessage,
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: 20.spMin,right: 20.spMin, bottom: 20.spMin),
+                    left: 20.spMin, right: 20.spMin, bottom: 20.spMin),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -250,8 +261,17 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () async {
                           Navigator.of(con!).pop(true);
                           AppDialog.showLoading(context: context);
-                          await PostApi.deleteProduct(context:context, productId: product.id!);
-                         Navigator.pop(con!);
+                          PostApi.deleteProduct(
+                                  context: context, productId: product.id!)
+                              .then((result) {
+                            Navigator.pop(con!);
+                            result
+                                ? null
+                                : AppSnackBar.showInSnackBar(
+                                    context: context,
+                                    message: AppMessage.somethingWrong,
+                                    isSuccessful: false);
+                          });
                         },
                         text: AppMessage.confirm),
                     AppButtons(
