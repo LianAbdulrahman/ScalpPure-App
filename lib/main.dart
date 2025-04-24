@@ -68,9 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ScreenUtilInit(
           minTextAdapt: true,
           builder: (_, __) => MaterialApp(
-            theme: ThemeData(
-              scaffoldBackgroundColor: AppColor.white,
-            ),
+                theme: ThemeData(
+                  scaffoldBackgroundColor: AppColor.white,
+                ),
                 home: const SplashScreen(),
                 debugShowCheckedModeBanner: false,
                 title: AppMessage.appName,

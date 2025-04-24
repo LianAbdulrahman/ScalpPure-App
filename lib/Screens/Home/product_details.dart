@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scalp_pure/BackEnd/class_models.dart';
@@ -57,11 +59,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   borderRadius: BorderRadius.circular(8.r),
                   child: widget.isFile
                       ? Image.file(
-                          widget.product.image!,
+                          File(widget.product.image!),
                           fit: BoxFit.cover,
                         )
-                      : Image.asset(
-                          widget.product.image!.path,
+                      : Image.network(
+                          widget.product.image!,
                           fit: BoxFit.cover,
                         ),
                 ),

@@ -174,7 +174,7 @@ class ProviderClass extends ChangeNotifier {
     }
 
     Product product =
-        Product(image: image, buildingUpChemicals: buildingUpChemicals);
+        Product(image: image.path, buildingUpChemicals: buildingUpChemicals);
 
     PostApi.addProduct(context: context, product: product).then((result) {
       Navigator.pop(con!);

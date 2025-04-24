@@ -14,7 +14,7 @@ class DataHandle<T> {
 
 class Product {
   String? id;
-  File? image;
+  String? image;
   List<dynamic> buildingUpChemicals = [];
   Timestamp? date;
 
@@ -22,7 +22,7 @@ class Product {
 
   static Product fromJson(Map<String, dynamic> json) {
     return Product(
-        image: File(json['image']),
+        image: json['image'],
         buildingUpChemicals: json['chemicals'],
         date: json['date']);
   }

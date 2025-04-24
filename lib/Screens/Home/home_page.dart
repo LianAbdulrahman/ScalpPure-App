@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:scalp_pure/BackEnd/class_models.dart';
@@ -88,11 +89,29 @@ class _HomePageState extends State<HomePage> {
                       ? Selector<ProviderClass, List<Product>>(
                           selector: (_, provider) => provider.products.data!,
                           builder: (context, list, child) {
-                            return ListView.builder(
-                                padding: EdgeInsets.only(top: 8.h),
-                                itemCount: list.length,
-                                itemBuilder: (_, i) =>
-                                    productContainer(product: list[i]));
+                            return list.isEmpty
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      LottieBuilder.asset(
+                                        'assets/lottie/empty.json',
+                                        height: 180.h,
+                                      ),
+                                      AppText(
+                                        text: 'No Products added',
+                                        fontSize: AppSize.titleSize - 3,
+                                        color: AppColor.darkGray,
+                                      ),
+                                      SizedBox(
+                                        height: 50.h,
+                                      )
+                                    ],
+                                  )
+                                : ListView.builder(
+                                    padding: EdgeInsets.only(top: 8.h),
+                                    itemCount: list.length,
+                                    itemBuilder: (_, i) =>
+                                        productContainer(product: list[i]));
                           })
                       : Center(
                           child: AppText(
@@ -191,7 +210,7 @@ class _HomePageState extends State<HomePage> {
         AppRoutes.pushTo(
             context,
             ProductDetail(
-              isFile: true,
+              isFile: false,
               product: product,
             ));
       },
@@ -303,9 +322,16 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10.r),
                           topLeft: Radius.circular(10.r)),
-                      child: Image.file(
+                      child: Image.network(
                         product.image!,
                         fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: AppColor.lightGrey.withOpacity(.5),
+                          );
+                        },
                         errorBuilder: (_, ___, __) => Container(
                           color: AppColor.lightGrey.withOpacity(.5),
                         ),
