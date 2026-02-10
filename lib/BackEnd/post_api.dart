@@ -10,7 +10,7 @@ import 'package:scalp_pure/BackEnd/provider_class.dart';
 
 // Create a Cloudinary instance and set your cloud name.
 var cloudinary = Cloudinary.fromStringUrl(
-    'cloudinary://524828953747846:2A0eOsaMZqzH-JvHYSvQguNmYX4@dowdvpepy');
+    'cloudinary://.......');
 
 class PostApi {
   static Future addProduct(
