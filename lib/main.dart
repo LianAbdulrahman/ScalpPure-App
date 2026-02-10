@@ -15,10 +15,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     name: 'ScalpPure',
     options: const FirebaseOptions(
-      apiKey: "AIzaSyAhVpwBOdiYmeZ4jzR1vviT-aV1vWqXWJA",
-      appId: "1:477093710050:android:db57d514d443aa736e76bb",
-      messagingSenderId: "477093710050",
-      projectId: "scalppure-2bff4",
+      apiKey: "..............",
+      appId: "................",
+      messagingSenderId: ".........",
+      projectId: "........",
     ),
   );
   runApp(const MyApp());
